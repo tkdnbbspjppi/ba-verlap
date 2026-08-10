@@ -453,7 +453,7 @@
   <div class="preview-wrap">
     <div id="docPreview">
       <h1>Berita Acara Hasil Verifikasi Lapangan</h1>
-      <h2 id="pv-titleScope">Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN)<br>dan/atau Bobot Manfaat Perusahaan (BMP)</h2>
+      <h2 id="pv-titleScope">Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN)<br>dan Bobot Manfaat Perusahaan (BMP)</h2>
       <div class="nomor">Nomor : <span id="pv-nomor">…………………………………</span></div>
 
       <p>
@@ -461,7 +461,7 @@
         bulan <span id="pv-bulan">………</span> tahun <span id="pv-tahun">………</span>
         di Lokasi produksi/pekerjaan <span id="pv-lokasi">……………………</span> telah dilaksanakan
         Verifikasi Lapangan dalam rangka <span id="pv-scopeBody">Penghitungan dan Verifikasi Nilai Tingkat Komponen
-        Dalam Negeri (TKDN) dan/atau Bobot Manfaat Perusahaan</span> sesuai dengan Peraturan Menteri
+        Dalam Negeri (TKDN) dan Bobot Manfaat Perusahaan</span> sesuai dengan Peraturan Menteri
         Perindustrian Nomor <span id="pv-permenNomor">………</span> Tahun <span id="pv-permenTahun">………</span>
         <span id="pv-permenTentangWrap">tentang <span id="pv-permenTentang"></span></span>.
       </p>
@@ -703,7 +703,7 @@ function scopeTitleHtml(mode){
   if(mode === 'bmp'){
     return 'VERIFIKASI BOBOT MANFAAT PERUSAHAAN (BMP)';
   }
-  return 'PENGHITUNGAN DAN VERIFIKASI NILAI TINGKAT KOMPONEN DALAM NEGERI (TKDN)<br>DAN/ATAU BOBOT MANFAAT PERUSAHAAN (BMP)';
+  return 'PENGHITUNGAN DAN VERIFIKASI NILAI TINGKAT KOMPONEN DALAM NEGERI (TKDN)<br>DAN BOBOT MANFAAT PERUSAHAAN (BMP)';
 }
 function scopeBodyText(mode){
   if(mode === 'tkdn'){
@@ -712,7 +712,7 @@ function scopeBodyText(mode){
   if(mode === 'bmp'){
     return 'Verifikasi Bobot Manfaat Perusahaan (BMP)';
   }
-  return 'Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN) dan/atau Bobot Manfaat Perusahaan';
+  return 'Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN) dan Bobot Manfaat Perusahaan';
 }
 
 function renderPreview(){
