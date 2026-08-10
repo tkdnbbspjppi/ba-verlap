@@ -328,7 +328,10 @@
         <p class="hint" style="margin-top:4px;">Judul dan kalimat pembuka Berita Acara akan menyesuaikan otomatis dengan pilihan ini.</p>
 
         <label>Nomor Berita Acara</label>
-        <input type="text" id="nomorBA" placeholder="mis. 001/BA-VL/TKDN/VIII/2026">
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="nomorBA" placeholder="mis. 001/BA-VL/TKDN/VIII/2026" style="flex: 1;">
+          <button type="button" id="btnAmbilNomor" class="btn btn-secondary" onclick="requestNomorBA()" style="padding: 8px 12px; font-size: 12px;">⚡ Ambil Nomor Otomatis</button>
+        </div>
 
         <div class="row3">
           <div>
@@ -554,6 +557,65 @@ const fieldIds = [
 ];
 const checkboxIds = ['tlLanjut','tlPerbaikan'];
 
+// --- KONFIGURASI API PENOMORAN ---
+// Ganti dengan URL /exec milik Anda yang disalin dari Google Apps Script
+const SCRIPT_URL = "https://script.google.com/macros/s/GANTI_DENGAN_URL_ANDA/exec"; 
+const API_KEY = "KODE_RAHASIA_TKDN_2026"; // Harus sama dengan di Apps Script
+
+async function requestNomorBA() {
+  // Mengambil data perusahaan dan verifikator dari input form yang ada
+  const inputVerifikator = document.getElementById('namaVerifikator').value;
+  const inputPerusahaan = document.getElementById('namaPerusahaan').value;
+  const btn = document.getElementById('btnAmbilNomor');
+  
+  // Opsional: Peringatkan user jika belum mengisi nama untuk keperluan pencatatan/log
+  if (!inputVerifikator || !inputPerusahaan) {
+    const lanjut = confirm("Nama Verifikator atau Nama Perusahaan belum diisi. Lanjutkan mengambil nomor?");
+    if (!lanjut) return;
+  }
+
+  // Ubah status tombol saat loading
+  btn.disabled = true;
+  btn.innerText = "⏳ Memproses...";
+
+  const payload = {
+      api_key: API_KEY,
+      nama_perusahaan: inputPerusahaan || "Belum diisi",
+      nama_verifikator: inputVerifikator || "Belum diisi"
+  };
+
+  try {
+      const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (data.status === 'success') {
+          // 1. Masukkan nomor yang didapat ke dalam input
+          document.getElementById('nomorBA').value = data.no_ba;
+          
+          // 2. Panggil fungsi bawaan aplikasi Anda agar preview dan draft langsung terupdate
+          renderPreview();
+          autoSaveDraft();
+          
+          alert("Berhasil! Nomor BA baru: " + data.no_ba);
+      } else {
+          alert("Gagal mengambil nomor: " + data.message);
+      }
+  } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      alert("Gagal terhubung ke server API. Periksa koneksi internet Anda.");
+  } finally {
+      // Kembalikan tombol ke keadaan semula
+      btn.disabled = false;
+      btn.innerText = "⚡ Ambil Nomor Otomatis";
+  }
+}
+// ---------------------------------
+  
 function getLingkup(){
   return Array.from(document.querySelectorAll('.lingkup:checked')).map(c => c.value);
 }
