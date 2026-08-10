@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Berita Acara Verifikasi Lapangan TKDN</title>
+<style>
+  :root{
+    --navy:#1c3a5e;
+    --navy-dark:#12283f;
+    --accent:#b8860b;
+    --bg:#f4f6f9;
+    --panel:#ffffff;
+    --border:#d9dee5;
+    --text:#233142;
+    --muted:#66758a;
+    --good:#2f7a4f;
+    --danger:#b3382c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header.app-header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+    color:#fff;
+    padding:18px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .header-title{display:flex; align-items:center; gap:14px;}
+  .app-logo-img{
+    height:44px;
+    width:auto;
+    background:#fff;
+    border-radius:6px;
+    padding:3px;
+    object-fit:contain;
+  }
+  header.app-header h1{
+    margin:0;
+    font-size:19px;
+    font-weight:600;
+    letter-spacing:.2px;
+  }
+  header.app-header p{
+    margin:2px 0 0;
+    font-size:12.5px;
+    color:#c9d6e6;
+  }
+  .header-actions{display:flex; gap:8px; flex-wrap:wrap;}
+  .btn{
+    border:none;
+    border-radius:6px;
+    padding:9px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:filter .15s ease, transform .05s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--accent); color:#2a1d02;}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-secondary{background:#2c4a70; color:#fff;}
+  .btn-secondary:hover{filter:brightness(1.15);}
+  .btn-ghost{background:transparent; color:#fff; border:1px solid rgba(255,255,255,.5);}
+  .btn-ghost:hover{background:rgba(255,255,255,.12);}
+  .btn-danger{background:#fdeceb; color:var(--danger); border:1px solid #f2c6c1;}
+  .btn-danger:hover{background:#fbdedb;}
+  .btn-small{padding:5px 10px; font-size:12px; border-radius:5px;}
+
+  main{
+    display:grid;
+    grid-template-columns:minmax(360px,460px) 1fr;
+    gap:20px;
+    padding:20px;
+    align-items:start;
+  }
+  @media (max-width: 980px){
+    main{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 20px 22px;
+  }
+  .panel h2{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    color:var(--navy);
+    margin:0 0 4px;
+    padding-bottom:8px;
+    border-bottom:2px solid var(--navy);
+  }
+  .form-scroll{
+    max-height:calc(100vh - 150px);
+    overflow-y:auto;
+    padding-right:6px;
+  }
+  fieldset{
+    border:none;
+    padding:0;
+    margin:16px 0 0;
+  }
+  legend{
+    font-size:13px;
+    font-weight:700;
+    color:var(--navy-dark);
+    margin-bottom:8px;
+    padding:0;
+  }
+  label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    margin:10px 0 4px;
+  }
+  input[type=text], input[type=date], textarea, select{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:13.5px;
+    font-family:inherit;
+    color:var(--text);
+    background:#fbfcfe;
+  }
+  input:focus, textarea:focus, select:focus{
+    outline:none;
+    border-color:var(--navy);
+    background:#fff;
+  }
+  textarea{resize:vertical; min-height:60px; line-height:1.4;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  .hint{font-size:11px; color:var(--muted); margin-top:3px;}
+
+  .checkgroup label.chk{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    font-weight:500;
+    color:var(--text);
+    margin:6px 0;
+    cursor:pointer;
+  }
+  .checkgroup input[type=checkbox]{
+    margin-top:2px;
+    width:16px; height:16px;
+    accent-color:var(--navy);
+    cursor:pointer;
+  }
+  .sub-input{margin-left:24px; margin-top:4px; width:calc(100% - 24px);}
+
+  /* PREVIEW */
+  .preview-wrap{
+    background:#e9edf2;
+    border-radius:10px;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+  }
+  #docPreview{
+    background:#fff;
+    width:210mm;
+    min-height:297mm;
+    padding:22mm 20mm;
+    box-shadow:0 2px 14px rgba(0,0,0,.15);
+    font-family:'Times New Roman', Times, serif;
+    color:#111;
+    font-size:12.5pt;
+    line-height:1.5;
+  }
+  #docPreview h1{
+    text-align:center;
+    font-size:13pt;
+    margin:0 0 2px;
+    text-transform:uppercase;
+  }
+  #docPreview h2{
+    text-align:center;
+    font-size:12.5pt;
+    margin:2px 0 2px;
+    text-transform:uppercase;
+  }
+  #docPreview .nomor{text-align:center; margin:6px 0 18px;}
+  #docPreview p{margin:0 0 12px; text-align:justify;}
+  #docPreview .party-block{margin:16px 0;}
+  #docPreview .party-title{font-weight:bold; margin-bottom:6px;}
+  #docPreview table.field-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:2px 0 14px;
+  }
+  #docPreview table.field-table td{
+    padding:1px 4px;
+    vertical-align:top;
+    font-size:12.5pt;
+  }
+  #docPreview table.field-table td.k{width:160px;}
+  #docPreview .designation{font-style:italic; margin:6px 0 0;}
+  #docPreview table.summary{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0 18px;
+  }
+  #docPreview table.summary td{
+    border:1px solid #000;
+    padding:8px;
+    font-size:12pt;
+    vertical-align:top;
+  }
+  #docPreview table.summary td.label{font-weight:bold; width:26%;}
+  #docPreview .sig-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:34px;
+  }
+  #docPreview .sig-table td{
+    width:33.33%;
+    text-align:center;
+    vertical-align:top;
+    padding:10px 8px;
+    font-size:12pt;
+  }
+  #docPreview .sig-space{height:60px;}
+  #docPreview .made-at{margin-top:28px;}
+  #docPreview .made-at table td{padding:1px 4px;}
+  .status-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .status-bar .saved-flag{color:var(--good); font-weight:600;}
+
+  /* history */
+  .history-list{
+    margin-top:10px;
+    max-height:180px;
+    overflow-y:auto;
+    border:1px solid var(--border);
+    border-radius:6px;
+  }
+  .history-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 10px;
+    font-size:12.5px;
+    border-bottom:1px solid var(--border);
+  }
+  .history-item:last-child{border-bottom:none;}
+  .history-item .meta{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-right:8px;}
+  .history-item .meta b{display:block; color:var(--navy-dark);}
+  .history-item .actions{display:flex; gap:6px; flex-shrink:0;}
+  .empty-note{font-size:12px; color:var(--muted); padding:10px; text-align:center;}
+
+  @media print{
+    body *{visibility:hidden;}
+    #docPreview, #docPreview *{visibility:visible;}
+    #docPreview{
+      position:absolute;
+      left:0; top:0;
+      width:210mm;
+      box-shadow:none;
+      margin:0;
+      padding:18mm 18mm;
+    }
+    .preview-wrap{background:#fff; padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-title">
+    <img class="app-logo-img" id="appLogo" src="https://bbspjppi.kemenperin.go.id/images/J5f4NAb6CvQGjZdIOc3kiqFrPTztS7Lh.png" alt="Logo BBSPJPPI" onerror="this.style.display='none'">
+    <div>
+      <h1>Generator Berita Acara Verifikasi Lapangan TKDN</h1>
+      <p>Penghitungan &amp; Verifikasi Nilai TKDN dan/atau BMP — sesuai template resmi</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <label class="btn btn-ghost" style="margin:0;">
+      🖼️ Ganti Logo
+      <input type="file" accept="image/*" onchange="handleLogoUpload(event)" style="display:none;">
+    </label>
+    <button class="btn btn-ghost" onclick="resetForm()">Formulir Baru</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / PDF</button>
+    <button class="btn btn-primary" onclick="downloadWord()">⬇ Download Word (.doc)</button>
+  </div>
+</header>
+
+<main>
+  <!-- FORM -->
+  <div class="panel">
+    <h2>Data Berita Acara</h2>
+    <div class="status-bar">
+      <span id="saveStatus">Draft tersimpan otomatis di perangkat ini</span>
+    </div>
+    <div class="form-scroll" id="formScroll">
+
+      <fieldset>
+        <legend>Identitas Berita Acara</legend>
+
+        <label>Lingkup Pekerjaan (menentukan judul Berita Acara)</label>
+        <select id="lingkupJudul">
+          <option value="tkdn">TKDN</option>
+          <option value="bmp">BMP</option>
+          <option value="tkdn_bmp" selected>TKDN dan BMP</option>
+        </select>
+        <p class="hint" style="margin-top:4px;">Judul dan kalimat pembuka Berita Acara akan menyesuaikan otomatis dengan pilihan ini.</p>
+
+        <label>Nomor Berita Acara</label>
+        <input type="text" id="nomorBA" placeholder="mis. 001/BA-VL/TKDN/VIII/2026">
+
+        <div class="row3">
+          <div>
+            <label>Hari</label>
+            <input type="text" id="hari" placeholder="mis. Selasa">
+          </div>
+          <div>
+            <label>Tanggal</label>
+            <input type="text" id="tanggal" placeholder="mis. empat">
+          </div>
+          <div>
+            <label>Bulan</label>
+            <input type="text" id="bulan" placeholder="mis. Agustus">
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label>Tahun</label>
+            <input type="text" id="tahun" placeholder="mis. dua ribu dua puluh enam">
+          </div>
+          <div>
+            <label>Lokasi Produksi/Pekerjaan</label>
+            <input type="text" id="lokasi" placeholder="mis. Pabrik PT. Maju Bersama, Semarang">
+          </div>
+        </div>
+
+        <label>Peraturan Menteri Perindustrian — Nomor &amp; Tahun</label>
+        <select id="permenPreset" onchange="applyPermenPreset()">
+          <option value="">— Pilih dari daftar, atau isi manual di bawah —</option>
+          <option value="p35_2025">No. 35 Tahun 2025 — Ketentuan dan Tata Cara Sertifikasi TKDN dan BMP</option>
+          <option value="p31_2022">No. 31 Tahun 2022 — Ketentuan dan Tata Cara Penghitungan Nilai TKDN Alat Kesehatan dan Alkes Diagnostik In Vitro</option>
+          <option value="p22_2020">No. 22 Tahun 2020 — Ketentuan dan Tata Cara Penghitungan Nilai TKDN Produk Elektronika dan Telematika</option>
+          <option value="lainnya">Lainnya (isi manual)</option>
+        </select>
+        <p class="hint" style="margin-top:4px;">Memilih dari daftar akan otomatis mengisi Nomor, Tahun, dan Tentang di bawah — tetap dapat diedit manual bila perlu.</p>
+
+        <div class="row2">
+          <input type="text" id="permenNomor" placeholder="Nomor, mis. 3">
+          <input type="text" id="permenTahun" placeholder="Tahun, mis. 2026">
+        </div>
+        <label>Tentang</label>
+        <input type="text" id="permenTentang" placeholder="mis. Pedoman Penghitungan TKDN Industri Alat Mesin Pertanian">
+      </fieldset>
+
+      <fieldset>
+        <legend>I. Tim Verifikator (Pihak Pertama)</legend>
+        <label>Nama Lengkap Ketua Tim Verifikator</label>
+        <input type="text" id="namaVerifikator">
+        <label>Nama Lembaga (LVI)</label>
+        <input type="text" id="lembagaLVI" value="BBSPJPPI">
+        <label>Alamat Lembaga</label>
+        <input type="text" id="alamatLVI" value="Jalan Ki Mangunsarkoro No. 6 Semarang">
+      </fieldset>
+
+      <fieldset>
+        <legend>II. Perwakilan Pelaku Usaha (Pihak Kedua)</legend>
+        <label>Nama Lengkap Perwakilan Perusahaan</label>
+        <input type="text" id="namaPerusahaanRep">
+        <label>Jabatan</label>
+        <input type="text" id="jabatanRep" placeholder="mis. Manajer Produksi">
+        <label>Nama Perusahaan</label>
+        <input type="text" id="namaPerusahaan">
+        <label>Alamat Pabrik</label>
+        <input type="text" id="alamatPabrik">
+      </fieldset>
+
+      <fieldset>
+        <legend>III. Ringkasan Hasil Verifikasi Lapangan</legend>
+
+        <label>Lingkup Verifikasi</label>
+        <div class="checkgroup">
+          <label class="chk"><input type="checkbox" class="lingkup" value="TKDN Barang"> TKDN Barang</label>
+          <label class="chk"><input type="checkbox" class="lingkup" value="TKDN Jasa Industri"> TKDN Jasa Industri</label>
+          <label class="chk"><input type="checkbox" class="lingkup" value="BMP"> BMP</label>
+          <label class="chk"><input type="checkbox" class="lingkup" value="TKDN Gabungan Barang dan Jasa"> TKDN Gabungan Barang dan Jasa</label>
+        </div>
+
+        <label>Metode Verifikasi</label>
+        <textarea id="metode">Penelaahan dokumen pendukung, wawancara personel, dan observasi langsung di fasilitas produksi/lokasi pekerjaan.</textarea>
+
+        <label>Temuan Lapangan <span class="hint">(satu baris = satu poin, otomatis diberi nomor)</span></label>
+        <textarea id="temuan" placeholder="Contoh:&#10;Dokumen pendukung komponen lokal telah sesuai&#10;Proses produksi utama dilakukan di lokasi terverifikasi"></textarea>
+
+        <label>Kesimpulan Sementara <span class="hint">(satu baris per produk jika lebih dari satu)</span></label>
+        <textarea id="kesimpulan" placeholder="Contoh:&#10;Produk A: Estimasi Nilai TKDN sementara 45,2%&#10;Produk B: Estimasi Nilai TKDN sementara 38,7%"></textarea>
+
+        <label>Tindak Lanjut</label>
+        <div class="checkgroup">
+          <label class="chk"><input type="checkbox" id="tlLanjut"> Proses dilanjutkan ke tahap penyusunan Laporan Hasil Verifikasi (LHV)</label>
+          <label class="chk"><input type="checkbox" id="tlPerbaikan"> Perlu perbaikan/tambahan dokumen paling lambat:</label>
+          <input type="text" id="tlTanggal" class="sub-input" placeholder="mis. 10 Agustus 2026">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Penutup</legend>
+        <div class="row2">
+          <div>
+            <label>Dibuat di</label>
+            <input type="text" id="dibuatDi" placeholder="mis. Semarang">
+          </div>
+          <div>
+            <label>Pada Tanggal</label>
+            <input type="text" id="dibuatTanggal" placeholder="mis. 4 Agustus 2026">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Riwayat Berita Acara Tersimpan</legend>
+        <button class="btn btn-secondary btn-small" onclick="saveToHistory()">💾 Simpan ke Riwayat</button>
+        <div class="history-list" id="historyList"></div>
+      </fieldset>
+
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-wrap">
+    <div id="docPreview">
+      <h1>Berita Acara Hasil Verifikasi Lapangan</h1>
+      <h2 id="pv-titleScope">Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN)<br>dan/atau Bobot Manfaat Perusahaan (BMP)</h2>
+      <div class="nomor">Nomor : <span id="pv-nomor">…………………………………</span></div>
+
+      <p>
+        Pada hari ini, <span id="pv-hari">………</span> tanggal <span id="pv-tanggal">……</span>
+        bulan <span id="pv-bulan">………</span> tahun <span id="pv-tahun">………</span>
+        di Lokasi produksi/pekerjaan <span id="pv-lokasi">……………………</span> telah dilaksanakan
+        Verifikasi Lapangan dalam rangka <span id="pv-scopeBody">Penghitungan dan Verifikasi Nilai Tingkat Komponen
+        Dalam Negeri (TKDN) dan/atau Bobot Manfaat Perusahaan</span> sesuai dengan Peraturan Menteri
+        Perindustrian Nomor <span id="pv-permenNomor">………</span> Tahun <span id="pv-permenTahun">………</span>
+        <span id="pv-permenTentangWrap">tentang <span id="pv-permenTentang"></span></span>.
+      </p>
+
+      <p>Pelaksanaan verifikasi lapangan ini dilakukan oleh antara pihak-pihak di bawah ini:</p>
+
+      <div class="party-block">
+        <div class="party-title">I. Tim Verifikator</div>
+        <table class="field-table">
+          <tr><td class="k">Nama Lengkap</td><td>: <span id="pv-namaVerifikator"></span></td></tr>
+          <tr><td class="k">Jabatan</td><td>: Ketua Tim Verifikator</td></tr>
+          <tr><td class="k">Nama Lembaga (LVI)</td><td>: <span id="pv-lembagaLVI"></span></td></tr>
+          <tr><td class="k">Alamat</td><td>: <span id="pv-alamatLVI"></span></td></tr>
+        </table>
+        <div class="designation">Selanjutnya disebut sebagai <b>PIHAK PERTAMA.</b></div>
+      </div>
+
+      <div class="party-block">
+        <div class="party-title">II. Perwakilan Pelaku Usaha</div>
+        <table class="field-table">
+          <tr><td class="k">Nama Lengkap</td><td>: <span id="pv-namaPerusahaanRep"></span></td></tr>
+          <tr><td class="k">Jabatan</td><td>: <span id="pv-jabatanRep"></span></td></tr>
+          <tr><td class="k">Nama Perusahaan</td><td>: <span id="pv-namaPerusahaan"></span></td></tr>
+          <tr><td class="k">Alamat Pabrik</td><td>: <span id="pv-alamatPabrik"></span></td></tr>
+        </table>
+        <div class="designation">Selanjutnya disebut sebagai <b>PIHAK KEDUA.</b></div>
+      </div>
+
+      <div class="party-title">III. Ringkasan Hasil Verifikasi Lapangan</div>
+      <table class="summary">
+        <tr>
+          <td class="label">Lingkup Verifikasi</td>
+          <td id="pv-lingkup"></td>
+        </tr>
+        <tr>
+          <td class="label">Metode Verifikasi</td>
+          <td id="pv-metode"></td>
+        </tr>
+        <tr>
+          <td class="label">Temuan Lapangan</td>
+          <td id="pv-temuan"></td>
+        </tr>
+        <tr>
+          <td class="label">Kesimpulan Sementara</td>
+          <td id="pv-kesimpulan"></td>
+        </tr>
+        <tr>
+          <td class="label">Tindak Lanjut</td>
+          <td id="pv-tindaklanjut"></td>
+        </tr>
+      </table>
+
+      <p>Demikian Berita Acara Hasil Verifikasi Lapangan ini dibuat dengan sebenar-benarnya.
+      Hasil akhir akan ditetapkan secara resmi dalam Laporan Final setelah dilakukan
+      <i>independent review</i> oleh Tim Evaluator.</p>
+
+      <div class="made-at">
+        <table>
+          <tr><td style="width:110px;">Dibuat di</td><td>: <span id="pv-dibuatDi"></span></td></tr>
+          <tr><td>Pada Tanggal</td><td>: <span id="pv-dibuatTanggal"></span></td></tr>
+        </table>
+      </div>
+
+      <table class="sig-table">
+        <tr>
+          <td>
+            <b>PIHAK KEDUA,</b><br>
+            <b>Perwakilan Pelaku Usaha</b>
+            <div class="sig-space"><i>(Tanda Tangan &amp; Stempel Perusahaan)</i></div>
+            (<span id="pv-sig-perusahaan">…………………………</span>)
+          </td>
+          <td></td>
+          <td>
+            <b>PIHAK PERTAMA,</b><br>
+            <b>Ketua Tim Verifikator</b>
+            <div class="sig-space"><i>(Tanda Tangan)</i></div>
+            (<span id="pv-sig-verifikator">…………………………</span>)
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+const fieldIds = [
+  'lingkupJudul',
+  'nomorBA','hari','tanggal','bulan','tahun','lokasi','permenPreset','permenNomor','permenTahun','permenTentang',
+  'namaVerifikator','lembagaLVI','alamatLVI',
+  'namaPerusahaanRep','jabatanRep','namaPerusahaan','alamatPabrik',
+  'metode','temuan','kesimpulan','tlTanggal',
+  'dibuatDi','dibuatTanggal'
+];
+const checkboxIds = ['tlLanjut','tlPerbaikan'];
+
+function getLingkup(){
+  return Array.from(document.querySelectorAll('.lingkup:checked')).map(c => c.value);
+}
+function setLingkup(values){
+  document.querySelectorAll('.lingkup').forEach(c => {
+    c.checked = Array.isArray(values) && values.includes(c.value);
+  });
+}
+function esc(str){
+  const d = document.createElement('div');
+  d.innerText = str || '';
+  return d.innerHTML;
+}
+function numberedList(text){
+  const lines = (text || '').split('\n').map(l => l.trim()).filter(Boolean);
+  if(lines.length === 0) return '<span style="color:#888;">1.</span>';
+  return lines.map((l,i) => `${i+1}. ${esc(l)}`).join('<br>');
+}
+function plainLines(text){
+  const lines = (text || '').split('\n').map(l => l.trim()).filter(Boolean);
+  if(lines.length === 0) return '<span style="color:#888;">Estimasi Nilai TKDN/BMP sementara ……%</span>';
+  return lines.map(l => esc(l)).join('<br>');
+}
+function checkboxLine(all, checkedList){
+  return all.map(opt => {
+    const on = checkedList.includes(opt);
+    return `${on ? '☒' : '☐'} ${esc(opt)}`;
+  }).join('&nbsp;&nbsp;&nbsp;');
+}
+
+const PERMEN_PRESETS = {
+  p35_2025: {
+    nomor: '35',
+    tahun: '2025',
+    tentang: 'Ketentuan dan Tata Cara Sertifikasi Tingkat Komponen Dalam Negeri dan Bobot Manfaat Perusahaan'
+  },
+  p31_2022: {
+    nomor: '31',
+    tahun: '2022',
+    tentang: 'Ketentuan dan Tata Cara Penghitungan Nilai Tingkat Komponen Dalam Negeri Alat Kesehatan dan Alat Kesehatan Diagnostik In Vitro'
+  },
+  p22_2020: {
+    nomor: '22',
+    tahun: '2020',
+    tentang: 'Ketentuan dan Tata Cara Penghitungan Nilai Tingkat Komponen Dalam Negeri Produk Elektronika dan Telematika'
+  }
+};
+function applyPermenPreset(){
+  const key = document.getElementById('permenPreset').value;
+  const preset = PERMEN_PRESETS[key];
+  if(preset){
+    document.getElementById('permenNomor').value = preset.nomor;
+    document.getElementById('permenTahun').value = preset.tahun;
+    document.getElementById('permenTentang').value = preset.tentang;
+  }
+  renderPreview();
+  autoSaveDraft();
+}
+
+const DEFAULT_LOGO_URL = 'https://bbspjppi.kemenperin.go.id/images/J5f4NAb6CvQGjZdIOc3kiqFrPTztS7Lh.png';
+const LOGO_KEY = 'tkdn_ba_logo_v1';
+function loadLogo(){
+  const custom = localStorage.getItem(LOGO_KEY);
+  const src = custom || DEFAULT_LOGO_URL;
+  document.querySelectorAll('.app-logo-img').forEach(img => {
+    img.style.display = '';
+    img.src = src;
+  });
+}
+function handleLogoUpload(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    localStorage.setItem(LOGO_KEY, reader.result);
+    loadLogo();
+  };
+  reader.readAsDataURL(file);
+}
+
+function scopeTitleHtml(mode){
+  if(mode === 'tkdn'){
+    return 'PENGHITUNGAN DAN VERIFIKASI NILAI TINGKAT KOMPONEN DALAM NEGERI (TKDN)';
+  }
+  if(mode === 'bmp'){
+    return 'VERIFIKASI BOBOT MANFAAT PERUSAHAAN (BMP)';
+  }
+  return 'PENGHITUNGAN DAN VERIFIKASI NILAI TINGKAT KOMPONEN DALAM NEGERI (TKDN)<br>DAN/ATAU BOBOT MANFAAT PERUSAHAAN (BMP)';
+}
+function scopeBodyText(mode){
+  if(mode === 'tkdn'){
+    return 'Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN)';
+  }
+  if(mode === 'bmp'){
+    return 'Verifikasi Bobot Manfaat Perusahaan (BMP)';
+  }
+  return 'Penghitungan dan Verifikasi Nilai Tingkat Komponen Dalam Negeri (TKDN) dan/atau Bobot Manfaat Perusahaan';
+}
+
+function renderPreview(){
+  const v = id => document.getElementById(id).value;
+
+  const scopeMode = v('lingkupJudul') || 'tkdn_bmp';
+  document.getElementById('pv-titleScope').innerHTML = scopeTitleHtml(scopeMode);
+  document.getElementById('pv-scopeBody').textContent = scopeBodyText(scopeMode);
+
+  document.getElementById('pv-nomor').textContent = v('nomorBA') || '…………………………………';
+  document.getElementById('pv-hari').textContent = v('hari') || '………';
+  document.getElementById('pv-tanggal').textContent = v('tanggal') || '……';
+  document.getElementById('pv-bulan').textContent = v('bulan') || '………';
+  document.getElementById('pv-tahun').textContent = v('tahun') || '………';
+  document.getElementById('pv-lokasi').textContent = v('lokasi') || '……………………';
+  document.getElementById('pv-permenNomor').textContent = v('permenNomor') || '………';
+  document.getElementById('pv-permenTahun').textContent = v('permenTahun') || '………';
+
+  const tentang = v('permenTentang');
+  document.getElementById('pv-permenTentangWrap').style.display = tentang ? 'inline' : 'none';
+  document.getElementById('pv-permenTentang').textContent = tentang;
+
+  document.getElementById('pv-namaVerifikator').textContent = v('namaVerifikator') || '…………………';
+  document.getElementById('pv-lembagaLVI').textContent = v('lembagaLVI') || '…………………';
+  document.getElementById('pv-alamatLVI').textContent = v('alamatLVI') || '…………………';
+
+  document.getElementById('pv-namaPerusahaanRep').textContent = v('namaPerusahaanRep') || '…………………';
+  document.getElementById('pv-jabatanRep').textContent = v('jabatanRep') || '…………………';
+  document.getElementById('pv-namaPerusahaan').textContent = v('namaPerusahaan') || '…………………';
+  document.getElementById('pv-alamatPabrik').textContent = v('alamatPabrik') || '…………………';
+
+  const lingkupOptions = ['TKDN Barang','TKDN Jasa Industri','BMP','TKDN Gabungan Barang dan Jasa'];
+  document.getElementById('pv-lingkup').innerHTML = checkboxLine(lingkupOptions, getLingkup());
+
+  document.getElementById('pv-metode').innerHTML = esc(v('metode')).replace(/\n/g,'<br>');
+  document.getElementById('pv-temuan').innerHTML = numberedList(v('temuan'));
+  document.getElementById('pv-kesimpulan').innerHTML = plainLines(v('kesimpulan'));
+
+  const tlLanjut = document.getElementById('tlLanjut').checked;
+  const tlPerbaikan = document.getElementById('tlPerbaikan').checked;
+  const tlTanggal = v('tlTanggal');
+  document.getElementById('pv-tindaklanjut').innerHTML =
+    `${tlLanjut ? '☒' : '☐'} Proses dilanjutkan ke tahap penyusunan Laporan Hasil Verifikasi (LHV)<br>` +
+    `${tlPerbaikan ? '☒' : '☐'} Perlu perbaikan/tambahan dokumen paling lambat : ${esc(tlTanggal) || '……………'}`;
+
+  document.getElementById('pv-dibuatDi').textContent = v('dibuatDi') || '……………………………………';
+  document.getElementById('pv-dibuatTanggal').textContent = v('dibuatTanggal') || '……………………………………';
+
+  document.getElementById('pv-sig-perusahaan').textContent = v('namaPerusahaanRep') || '…………………………';
+  document.getElementById('pv-sig-verifikator').textContent = v('namaVerifikator') || '…………………………';
+}
+
+function collectFormData(){
+  const data = {};
+  fieldIds.forEach(id => data[id] = document.getElementById(id).value);
+  checkboxIds.forEach(id => data[id] = document.getElementById(id).checked);
+  data.lingkup = getLingkup();
+  return data;
+}
+function applyFormData(data){
+  if(!data) return;
+  fieldIds.forEach(id => {
+    if(document.getElementById(id) && data[id] !== undefined) document.getElementById(id).value = data[id];
+  });
+  checkboxIds.forEach(id => {
+    if(document.getElementById(id) && data[id] !== undefined) document.getElementById(id).checked = data[id];
+  });
+  setLingkup(data.lingkup);
+  renderPreview();
+}
+
+const DRAFT_KEY = 'tkdn_ba_draft_v1';
+const HISTORY_KEY = 'tkdn_ba_history_v1';
+let saveTimer;
+function autoSaveDraft(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(collectFormData()));
+    const status = document.getElementById('saveStatus');
+    status.textContent = 'Draft tersimpan otomatis · ' + new Date().toLocaleTimeString('id-ID');
+    status.classList.add('saved-flag');
+  }, 400);
+}
+function loadDraft(){
+  try{
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(raw) applyFormData(JSON.parse(raw));
+  }catch(e){ console.error(e); }
+}
+
+function resetForm(){
+  if(!confirm('Kosongkan formulir dan mulai berita acara baru? Draft otomatis akan ditimpa.')) return;
+  fieldIds.forEach(id => document.getElementById(id).value = '');
+  checkboxIds.forEach(id => document.getElementById(id).checked = false);
+  setLingkup([]);
+  document.getElementById('lingkupJudul').value = 'tkdn_bmp';
+  document.getElementById('lembagaLVI').value = 'BBSPJPPI';
+  document.getElementById('alamatLVI').value = 'Jalan Ki Mangunsarkoro No. 6 Semarang';
+  document.getElementById('metode').value = 'Penelaahan dokumen pendukung, wawancara personel, dan observasi langsung di fasilitas produksi/lokasi pekerjaan.';
+  renderPreview();
+  autoSaveDraft();
+}
+
+function getHistory(){
+  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; }
+}
+function setHistory(list){ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }
+
+function saveToHistory(){
+  const data = collectFormData();
+  const list = getHistory();
+  const entry = {
+    id: Date.now().toString(36),
+    nomor: data.nomorBA || '(tanpa nomor)',
+    perusahaan: data.namaPerusahaan || '(tanpa nama perusahaan)',
+    tanggal: data.dibuatTanggal || '',
+    savedAt: new Date().toLocaleString('id-ID'),
+    data
+  };
+  list.unshift(entry);
+  setHistory(list);
+  renderHistory();
+  alert('Berita acara disimpan ke riwayat perangkat ini.');
+}
+function loadHistoryEntry(id){
+  const entry = getHistory().find(h => h.id === id);
+  if(entry){ applyFormData(entry.data); autoSaveDraft(); }
+}
+function deleteHistoryEntry(id){
+  if(!confirm('Hapus berita acara ini dari riwayat?')) return;
+  setHistory(getHistory().filter(h => h.id !== id));
+  renderHistory();
+}
+function renderHistory(){
+  const list = getHistory();
+  const el = document.getElementById('historyList');
+  if(list.length === 0){
+    el.innerHTML = '<div class="empty-note">Belum ada berita acara yang disimpan ke riwayat.</div>';
+    return;
+  }
+  el.innerHTML = list.map(h => `
+    <div class="history-item">
+      <div class="meta">
+        <b>${esc(h.nomor)}</b>
+        ${esc(h.perusahaan)} · ${esc(h.savedAt)}
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary btn-small" onclick="loadHistoryEntry('${h.id}')">Buka</button>
+        <button class="btn btn-danger btn-small" onclick="deleteHistoryEntry('${h.id}')">Hapus</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function downloadWord(){
+  const content = document.getElementById('docPreview').innerHTML;
+  const nomor = (document.getElementById('nomorBA').value || 'draft').replace(/[\\\/:*?"<>|]/g, '-');
+  const html = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8">
+<style>
+  body{font-family:'Times New Roman',serif; font-size:12.5pt; line-height:1.5; color:#111;}
+  h1{text-align:center; font-size:13pt; text-transform:uppercase; margin:0 0 2px;}
+  h2{text-align:center; font-size:12.5pt; text-transform:uppercase; margin:2px 0 2px;}
+  .nomor{text-align:center; margin:6px 0 18px;}
+  p{margin:0 0 12px; text-align:justify;}
+  .party-title{font-weight:bold; margin-bottom:6px;}
+  table.field-table{width:100%; border-collapse:collapse; margin:2px 0 14px;}
+  table.field-table td{padding:1px 4px; vertical-align:top;}
+  table.field-table td.k{width:160px;}
+  .designation{font-style:italic; margin:6px 0 0;}
+  table.summary{width:100%; border-collapse:collapse; margin:14px 0 18px;}
+  table.summary td{border:1px solid #000; padding:8px; vertical-align:top;}
+  table.summary td.label{font-weight:bold; width:26%;}
+  .sig-table{width:100%; border-collapse:collapse; margin-top:34px;}
+  .sig-table td{width:33.33%; text-align:center; vertical-align:top; padding:10px 8px;}
+  .sig-space{height:60px;}
+  .made-at{margin-top:28px;}
+</style></head>
+<body>${content}</body></html>`;
+
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Berita_Acara_Verifikasi_TKDN_${nomor}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+document.getElementById('formScroll').addEventListener('input', () => { renderPreview(); autoSaveDraft(); });
+document.getElementById('formScroll').addEventListener('change', () => { renderPreview(); autoSaveDraft(); });
+
+loadDraft();
+loadLogo();
+renderPreview();
+renderHistory();
+</script>
+</body>
+</html>
